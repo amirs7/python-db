@@ -1,12 +1,27 @@
 from peewee import *
 
-db = MySQLDatabase('myscript', user='hoda', password='1234', port=4306)
+db = MySQLDatabase('myscript', user='hoda', password='1234')
+
+
+class Author(Model):
+    id = PrimaryKeyField()
+    firstname = CharField()
+
+    class Meta:
+        database = db
 
 
 class Book(Model):
     id = PrimaryKeyField()
     name = CharField()
-    author = CharField()
+
+    class Meta:
+        database = db
+
+
+class BookAuthor(Model):
+    book = ForeignKeyField(Book)
+    author = ForeignKeyField(Author, backref='books')
 
     class Meta:
         database = db
@@ -15,11 +30,21 @@ class Book(Model):
 def main():
     print("Hello World!")
     db.connect()
-    db.create_tables([Book])
-    book = Book(name="B1", author="a1")
-    book.save()
-    b = Book.select().get()
-    print(b.name)
+    db.drop_tables([Book, Author, BookAuthor])
+    db.create_tables([Book, Author, BookAuthor])
+    BookAuthor.delete().execute()
+    Book.delete().execute()
+    Author.delete().execute()
+    author = Author(firstname="amir")
+    author.save()
+    b1 = Book(name="B1", author=author)
+    b1.save()
+    b2 = Book(name="B2", author=author)
+    b2.save()
+    BookAuthor.insert(author=author, book=b1).execute()
+    BookAuthor.insert(author=author, book=b2).execute()
+    for book_entry in author.books:
+        print(book_entry.book.name)
 
 
 if __name__ == "__main__":
