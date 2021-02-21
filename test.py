@@ -1,40 +1,13 @@
-from peewee import *
+from dotenv import load_dotenv
+from src.orm import database
+from src.orm.entities import Author, Book, BookAuthor
 
-db = MySQLDatabase('myscript', user='hoda', password='1234')
+db = database.instance
 
-
-class Author(Model):
-    id = PrimaryKeyField()
-    firstname = CharField()
-
-    class Meta:
-        database = db
-
-
-class Book(Model):
-    id = PrimaryKeyField()
-    name = CharField()
-
-    class Meta:
-        database = db
-
-
-class BookAuthor(Model):
-    book = ForeignKeyField(Book)
-    author = ForeignKeyField(Author, backref='books')
-
-    class Meta:
-        database = db
+load_dotenv()
 
 
 def main():
-    print("Hello World!")
-    db.connect()
-    db.drop_tables([Book, Author, BookAuthor])
-    db.create_tables([Book, Author, BookAuthor])
-    BookAuthor.delete().execute()
-    Book.delete().execute()
-    Author.delete().execute()
     author = Author(firstname="amir")
     author.save()
     b1 = Book(name="B1", author=author)
