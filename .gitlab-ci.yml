@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - release
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
@@ -9,20 +10,39 @@ variables:
   MYSQL_USER: hoda
   MYSQL_PASSWORD: 1234
 
-test:
-  services:
-    - mysql
+#test:
+#  services:
+#    - mysql
+#  image: python:3.8-slim
+#  stage: test
+#  script:
+#    - python3 -m venv myenv
+#    - . myenv/bin/activate
+#    - pip install --no-cache-dir -r requirements.txt
+#    - python init_db.py
+#    - python -m unittest
+#  variables:
+#    DB_USER: hoda
+#    DB_PASS: 1234
+#    DB_NAME: myscript
+#    DB_HOST: mysql
+
+build:
   image: python:3.8-slim
-  stage: test
+  stage: build
   script:
     - python3 -m venv myenv
     - . myenv/bin/activate
     - pip install --no-cache-dir -r requirements.txt
-    - python init_db.py
-    - python -m unittest
-  variables:
-    DB_USER: hoda
-    DB_PASS: 1234
-    DB_NAME: myscript
-    DB_HOST: mysql
+    - pyinstaller --onefile --noconfirm --clean run.py
+  artifacts:
+    paths:
+      - dist/
+
+upload:
+  stage: build
+  image: curlimages/curl:latest
+  script:
+    - curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file dist/run ${PACKAGE_REGISTRY_URL}/db-script
+
 
