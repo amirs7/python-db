@@ -1,0 +1,23 @@
+stages:
+  - test
+  - build
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  MYSQL_ROOT_PASSWORD: 12345
+  MYSQL_DATABASE: myscript
+  MYSQL_USER: hoda
+  MYSQL_PASSWORD: 1234
+
+test:
+  services:
+    - mysql
+  image: python:3.8-slim
+  stage: test
+  script:
+    - python3 -m venv myenv
+    - . myenv/bin/activate
+    - pip install --no-cache-dir -r requirements.txt
+    - python init_db.py
+    - python -m unittest
+

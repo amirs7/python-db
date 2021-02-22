@@ -1,17 +1,16 @@
-from . import database
+from .database import instance, config
 from .entities import Author
 from .entities import Book
 from .entities import BookAuthor
 
-db = database.instance
-print("Database Config: ", database.config)
-db.init(database.name, **database.config)
-db.connect()
+print("Database Config: ", config)
+instance.init(database.name, **config)
+instance.connect()
 
 
-def initialize():
-    db.drop_tables([Book, Author, BookAuthor])
-    db.create_tables([Book, Author, BookAuthor])
+def reinitialize():
+    instance.drop_tables([Book, Author, BookAuthor])
+    instance.create_tables([Book, Author, BookAuthor])
     BookAuthor.delete().execute()
     Book.delete().execute()
     Author.delete().execute()

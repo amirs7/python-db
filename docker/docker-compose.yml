@@ -14,3 +14,7 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 4306:3306
+
+networks:
+  default:
+    name: db-net

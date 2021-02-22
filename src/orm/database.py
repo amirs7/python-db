@@ -1,5 +1,6 @@
-from peewee import MySQLDatabase
 import os
+
+from peewee import MySQLDatabase
 
 instance = MySQLDatabase(None)
 
