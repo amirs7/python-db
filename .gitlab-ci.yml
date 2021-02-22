@@ -52,4 +52,13 @@ upload:
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file dist/run ${PACKAGE_REGISTRY_URL}/${LINUX_BINARY}
 
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  when: manual
+  script:
+    - |
+      release-cli create --name "Release $CI_COMMIT_REF_SLUG" --tag-name $CI_COMMIT_REF_SLUG \
+        --assets-link "{\"name\":\"${LINUX_BINARY}\",\"url\":\"${PACKAGE_REGISTRY_URL}/${LINUX_BINARY}\"}"
+
 
