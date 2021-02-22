@@ -10,7 +10,7 @@ services:
       MYSQL_USER: hoda
       MYSQL_PASSWORD: 1234
     volumes:
-      - ./mysql_server.cnf:/etc/mysql/conf.d/mysql_server.cnf
+      - ./mysql_server.conf:/etc/mysql/conf.d/mysql_server.conf
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - 4306:3306

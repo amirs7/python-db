@@ -3,7 +3,6 @@ from src.orm import database
 from src.orm.entities import Author, Book, BookAuthor
 
 db = database.instance
-
 load_dotenv()
 
 
