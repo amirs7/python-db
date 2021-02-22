@@ -43,6 +43,7 @@ upload:
   stage: build
   image: curlimages/curl:latest
   script:
-    - curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file dist/run ${PACKAGE_REGISTRY_URL}/db-script
+    - | 
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file dist/run ${PACKAGE_REGISTRY_URL}/db-script
 
 
