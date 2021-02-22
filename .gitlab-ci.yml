@@ -32,7 +32,7 @@ build:
   image: python:3.8-slim
   stage: build
   before_script:
-    - apt update && apt install binutils
+    - apt update && apt install -y binutils
   script:
     - python3 -m venv myenv
     - . myenv/bin/activate
