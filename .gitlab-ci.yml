@@ -20,4 +20,9 @@ test:
     - pip install --no-cache-dir -r requirements.txt
     - python init_db.py
     - python -m unittest
+  variables:
+    DB_USER: hoda
+    DB_PASS: 1234
+    DB_NAME: myscript
+    DB_HOST: mysql
 
