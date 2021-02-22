@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - upload
   - release
 variables:
   DOCKER_DRIVER: overlay2
@@ -30,6 +31,8 @@ variables:
 build:
   image: python:3.8-slim
   stage: build
+  before_script:
+    - apt update && apt install binutils
   script:
     - python3 -m venv myenv
     - . myenv/bin/activate
@@ -40,10 +43,10 @@ build:
       - dist/
 
 upload:
-  stage: build
+  stage: upload
   image: curlimages/curl:latest
   script:
-    - | 
+    - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file dist/run ${PACKAGE_REGISTRY_URL}/db-script
 
 
