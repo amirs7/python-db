@@ -1,5 +1,4 @@
-import src.orm as orm
-from src.orm.entities import Author, Book, BookAuthor
+from src.orm.entities import Book
 
 
 def main():
